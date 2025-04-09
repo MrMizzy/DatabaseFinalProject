@@ -13,4 +13,14 @@ CREATE Table Hostels(
     Location VARCHAR(255),
     Manager_ID int,
     FOREIGN KEY(Manager_ID) REFERENCES managers(manager_ID));
-select * from hostels;
+
+CREATE Table RoomTypes(
+    TypeID int NOT NULL PRIMARY KEY,
+    Hostel_ID int,
+    FOREIGN KEY(Hostel_ID) REFERENCES Hostels(Hostel_ID),
+    Name VARCHAR(255),
+    Price int,
+    Total_Rooms int,
+    Booked_Rooms int,
+    Available_Rooms int
+);
