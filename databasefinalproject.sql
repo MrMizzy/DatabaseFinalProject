@@ -24,3 +24,10 @@ CREATE Table RoomTypes(
     Booked_Rooms int,
     Available_Rooms int
 );
+
+CREATE Table Rooms(
+    Room_ID int NOT NULL PRIMARY KEY,
+    Room_Type int,
+    Foreign Key (Room_Type) REFERENCES RoomTypes(TypeID),
+    Available_Beds int
+);
