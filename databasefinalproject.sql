@@ -87,28 +87,28 @@ INSERT into hostels(`Hostel_ID`,`Name`,`Location`,`Manager_ID`) VALUES
 >>>>>>> 22084186b8875dc07f2c476f9df3a316d6b9d07f
 
 
-INSERT INTO roomtypes(TypeID, Hostel_ID, `Name`, Price, Total_Rooms, Booked_Rooms, Available_Rooms) VALUES
-(1, 1, '3-In-A-Room, One Washroom', 5700, 20, 4, 16),
-(2, 1, '3-In-A-Room, Two Washroom', 5900, 20, 4, 16),
-(3, 1, '2-In-A-Room', 6800, 20, 4, 16),
-(4, 2, '2-In-A-Room', 7100, 20, 4, 16),
-(5, 4, '2-In-A-Room', 6800, 10, 0, 10),
-(6, 4, '3-In-A-Room', 5800, 10, 4, 6),
-(7, 3, '2-In-A-Room', 7000, 15, 10, 5),
-(8, 3, '3-In-A-Room', 6000, 10, 1, 9),
-(9, 5, '2-In-A-Room, Balcony', 6900, 12, 3, 9),
-(10, 5, '3-In-A-Room', 5700, 12, 5, 7),
-(11, 6, 'Single Room, Ensuite', 8000, 8, 6, 2),
-(12, 6, '2-In-A-Room', 7200, 10, 4, 6),
-(13, 7, '3-In-A-Room', 5900, 15, 7, 8),
-(14, 7, '2-In-A-Room', 7500, 10, 5, 5),
-(15, 8, '2-In-A-Room', 7000, 10, 2, 8),
-(16, 8, 'Single Room', 8500, 5, 1, 4),
-(17, 9, '3-In-A-Room', 6100, 15, 6, 9),
-(18, 9, '2-In-A-Room', 7300, 12, 7, 5),
-(19, 10, 'Single Room', 8800, 6, 3, 3),
-(20, 10, '3-In-A-Room', 6200, 9, 2, 7);
-
-
-
+INSERT INTO roomtypes(TypeID, Hostel_ID, `Name`, Price, Total_Rooms, Booked_Rooms) VALUES
+("DUF_A2","DUF_A","Dufie Annex 2 in a Room",7100,50,50),
+("DUF_G2","DUF_G","Dufie Gold 2 in a Room",6800,24,24),
+("DUF_P2","DUF_P","Dufie Prestige 2 in a Room",6800,10,10),
+("DUF_PL31","DUF_PL","Dufie 3 in a Room w 1 bathroom",5700,15,15),
+("DUF_PL32","DUF_PL","Dufie 3 in a Room w 2 bathroom",5900,15,15),
+("OLD_H2","OLD_H","Old Hosanna 2 in a Room",6400,0,0),
+("OLD_H3","OLD_H","Old Hosanna 3 in a Room",5600,0,0),
+("NEW_H2","NEW_H","New Hosanna 2 in a Room",6900,0,0),
+("NEW_H3","NEW_H","New Hosanna 3 in a Room",5000,0,0),
+("OLD_M2","OLD_M","Old Masere 2 in a Room",6800,18,10),
+("OLD_M3","OLD_M","Old Masere 3 in a Room",5800,5,3),
+("NEW_M2","NEW_M","New Masere 2 in a Room",7000,30,28),
+("NEW_M3","NEW_M","New Masere 3 in a Room",6000,9,8),
+("CEE_C1","CEE_C","Ceewus 1 in a Room",9000,0,0),
+("CEE_C2","CEE_C","Ceewus 2 in a Room w AC",7000,0,0),
+("CEE_C2","CEE_C","Ceewus 2 in a Room w/out AC",6000,0,0),
+("CEE_C3","CEE_C","Ceewus 3 in a Room",,0,0),
+("TAN_T2","TAN_T","Tanko 2 in a Room",8000,16,15),
+("CHA_C1","CHA_C","Charlotte 1 in a Room",8000,50,10),
+("CHA_C2B","CHA_C","Charlotte 2 in a Room Big",6800,50,10),
+("CHA_C2S","CHA_C","Charlotte 2 in a Room Small",5200,50,10),
+("CHA_C3","CHA_C","Charlotte 3 in a Room",4600,50,10),
+("CHA_C4","CHA_C","Charlotte 4 in a Room",2500,50,10);
 
