@@ -8,21 +8,33 @@ CREATE Table Managers(
 );
 
 CREATE Table Hostels(
+<<<<<<< HEAD
     Hostel_ID VARCHAR(6) NOT NULL PRIMARY KEY,
+=======
+    Hostel_ID int NOT NULL PRIMARY KEY,
+>>>>>>> 22084186b8875dc07f2c476f9df3a316d6b9d07f
     Name VARCHAR(255),
     Location VARCHAR(255),
     Manager_ID int,
     FOREIGN KEY(Manager_ID) REFERENCES managers(manager_ID));
 
 CREATE Table RoomTypes(
+<<<<<<< HEAD
     TypeID VARCHAR(10) NOT NULL PRIMARY KEY,
+=======
+    TypeID int NOT NULL PRIMARY KEY,
+>>>>>>> 22084186b8875dc07f2c476f9df3a316d6b9d07f
     Hostel_ID int,
     FOREIGN KEY(Hostel_ID) REFERENCES Hostels(Hostel_ID),
     Name VARCHAR(255),
     Price int,
     Total_Rooms int,
     Booked_Rooms int,
+<<<<<<< HEAD
     Available_Rooms int as (`Total_Rooms`-`Booked_Rooms`)
+=======
+    Available_Rooms int
+>>>>>>> 22084186b8875dc07f2c476f9df3a316d6b9d07f
 );
 
 CREATE Table Rooms(
@@ -40,6 +52,7 @@ INSERT into Managers(`Manager_ID`,`Name`,`PhoneNo.`) VALUES
 (5,"Carlos Ayi-Bonte","+233242781788"),
 (6,"Francisca Frimpong","+233244370272"),
 (7,"Bernard Olu Sawyerr","+233244329320"),
+<<<<<<< HEAD
 (8,"Roger Jackson","+23327884440"),
 (9,"Cynthia","+233265563074");
 
@@ -57,6 +70,21 @@ INSERT into hostels(`Hostel_ID`,`Name`,`Location`,`Manager_ID`) VALUES
 ("NEW_H","New Hosanna","University Avenue", 3),
 ("COL_C","Columbiana","4th Turn, University Avenue", 5),
 ("CEE_C","CEEWUS","1st Turn, University Avenue",9);
+=======
+(8,"Roger Jackson","+23327884440");
+
+INSERT into hostels(`Hostel_ID`,`Name`,`Location`,`Manager_ID`) VALUES
+(1,"Dufie Platinum","3rd Turn, University Avenue", 2),
+(2,"Dufie Annex","4th Turn, University Avenue", 2),
+(3,"New Masere","2nd Turn, University Avenue", 1),
+(4,"Old Masere","4th Turn, University Avenue", 6),
+(5,"Tanko","University Avenue", 4),
+(6,"Queenstar","University Avenue", 7),
+(7,"Charlotte's Court","1st Turn, University Avenue", 8),
+(8,"Old Hosanna","3rd Turn, University Avenue", 3),
+(9,"New Hosanna","University Avenue", 3),
+(10,"Columbiana","4th Turn, University Avenue", 5);
+>>>>>>> 22084186b8875dc07f2c476f9df3a316d6b9d07f
 
 
 INSERT INTO roomtypes(TypeID, Hostel_ID, `Name`, Price, Total_Rooms, Booked_Rooms, Available_Rooms) VALUES
