@@ -16,7 +16,7 @@ CREATE Table Hostels(
 
 CREATE Table RoomTypes(
     TypeID VARCHAR(10) NOT NULL PRIMARY KEY,
-    Hostel_ID int,
+    Hostel_ID VARCHAR(6),
     FOREIGN KEY(Hostel_ID) REFERENCES Hostels(Hostel_ID),
     Name VARCHAR(255),
     Price int,
@@ -27,7 +27,7 @@ CREATE Table RoomTypes(
 
 CREATE Table Rooms(
     Room_ID int NOT NULL PRIMARY KEY,
-    Room_Type int,
+    Room_Type VARCHAR(10),
     Foreign Key (Room_Type) REFERENCES RoomTypes(TypeID),
     Available_Beds int
 );
@@ -74,9 +74,9 @@ INSERT INTO roomtypes(TypeID, Hostel_ID, `Name`, Price, Total_Rooms, Booked_Room
 ("NEW_M2","NEW_M","New Masere 2 in a Room",7000,30,28),
 ("NEW_M3","NEW_M","New Masere 3 in a Room",6000,9,8),
 ("CEE_C1","CEE_C","Ceewus 1 in a Room",9000,0,0),
-("CEE_C2","CEE_C","Ceewus 2 in a Room w AC",7000,0,0),
+("CEE_C2A","CEE_C","Ceewus 2 in a Room w AC",7000,0,0),
 ("CEE_C2","CEE_C","Ceewus 2 in a Room w/out AC",6000,0,0),
-("CEE_C3","CEE_C","Ceewus 3 in a Room",,0,0),
+("CEE_C3","CEE_C","Ceewus 3 in a Room",9000,0,0),
 ("TAN_T2","TAN_T","Tanko 2 in a Room",8000,16,15),
 ("CHA_C1","CHA_C","Charlotte 1 in a Room",8000,50,10),
 ("CHA_C2B","CHA_C","Charlotte 2 in a Room Big",6800,50,10),
