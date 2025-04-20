@@ -11,7 +11,7 @@ def get_connection():
         connection = mysql.connector.connect(
             host="REMOTE_IP_ADDRESS",         # e.g., "192.168.1.100"
             user="your_username",
-            password="your_password\",
+            password="your_password",
             database="HostelSystem"
         )
         return connection
