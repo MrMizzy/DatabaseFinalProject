@@ -9,9 +9,9 @@ from mysql.connector import Error
 def get_connection():
     try:
         connection = mysql.connector.connect(
-            host="REMOTE_IP_ADDRESS",         # e.g., "192.168.1.100"
-            user="your_username",
-            password="your_password",
+            host="34.55.73.181",
+            user="root",
+            password="database",
             database="HostelSystem"
         )
         return connection
