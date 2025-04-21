@@ -12,7 +12,7 @@ def get_connection():
             host="34.55.73.181",
             user="root",
             password="database",
-            database="HostelSystem "
+            database="HostelSystem"
         )
         return connection
     except Error as e:
