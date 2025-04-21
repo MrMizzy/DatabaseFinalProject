@@ -3,13 +3,13 @@ create database HostelSystem;
 
 CREATE Table Managers(
     `Manager_ID` int NOT NULL PRIMARY KEY,
-    `Name` VARCHAR(255),
+    `Manager_Name` VARCHAR(255),
     `PhoneNo.` VARCHAR(13)
 );
 
 CREATE Table Hostels(
     Hostel_ID VARCHAR(6) NOT NULL PRIMARY KEY,
-    Name VARCHAR(255),
+    Hostel_Name VARCHAR(255),
     Location VARCHAR(255),
     Manager_ID int,
     FOREIGN KEY(Manager_ID) REFERENCES managers(manager_ID));
@@ -18,7 +18,7 @@ CREATE Table RoomTypes(
     TypeID VARCHAR(10) NOT NULL PRIMARY KEY,
     Hostel_ID VARCHAR(6),
     FOREIGN KEY(Hostel_ID) REFERENCES Hostels(Hostel_ID),
-    Name VARCHAR(255),
+    Room_Description VARCHAR(255),
     Price int,
     Total_Rooms int,
     Booked_Rooms int,
@@ -32,7 +32,7 @@ CREATE Table Rooms(
     Available_Beds int
 );
 
-INSERT into Managers(`Manager_ID`,`Name`,`PhoneNo.`) VALUES
+INSERT into Managers(`Manager_ID`,`Manager_Name`,`PhoneNo.`) VALUES
 (1,"Victoria Kudjoe", "+233543958700"),
 (2,"Joyce Gyekye", "+233201323058"),
 (3,"Simon","+233542601827"),
@@ -43,7 +43,7 @@ INSERT into Managers(`Manager_ID`,`Name`,`PhoneNo.`) VALUES
 (8,"Roger Jackson","+23327884440"),
 (9,"Cynthia","+233265563074");
 
-INSERT into hostels(`Hostel_ID`,`Name`,`Location`,`Manager_ID`) VALUES
+INSERT into hostels(`Hostel_ID`,`Hostel_Name`,`Location`,`Manager_ID`) VALUES
 ("DUF_A","Dufie Annex","4th Turn, University Avenue", 2),
 ("DUF_G","Dufie Gold","3rd Turn, University Avenue", 2),
 ("DUF_P","Dufie Prestige","3rd Turn, University Avenue", 2),
@@ -59,7 +59,7 @@ INSERT into hostels(`Hostel_ID`,`Name`,`Location`,`Manager_ID`) VALUES
 ("CEE_C","CEEWUS","1st Turn, University Avenue",9);
 
 
-INSERT INTO roomtypes(TypeID, Hostel_ID, `Name`, Price, Total_Rooms, Booked_Rooms) VALUES
+INSERT INTO roomtypes(TypeID, Hostel_ID, Room_Description, Price, Total_Rooms, Booked_Rooms) VALUES
 ("DUF_A2","DUF_A","Dufie Annex 2 in a Room",7100,50,50),
 ("DUF_G2","DUF_G","Dufie Gold 2 in a Room",6800,24,24),
 ("DUF_P2","DUF_P","Dufie Prestige 2 in a Room",6800,10,10),
@@ -83,4 +83,3 @@ INSERT INTO roomtypes(TypeID, Hostel_ID, `Name`, Price, Total_Rooms, Booked_Room
 ("CHA_C2S","CHA_C","Charlotte 2 in a Room Small",5200,50,10),
 ("CHA_C3","CHA_C","Charlotte 3 in a Room",4600,50,10),
 ("CHA_C4","CHA_C","Charlotte 4 in a Room",2500,50,10);
-
