@@ -26,7 +26,7 @@ CREATE Table RoomTypes(
 );
 
 CREATE Table Rooms(
-    Room_ID int NOT NULL PRIMARY KEY,
+    Room_ID VARCHAR(10) NOT NULL PRIMARY KEY,
     Room_Type VARCHAR(10),
     Foreign Key (Room_Type) REFERENCES RoomTypes(TypeID),
     Available_Beds int
