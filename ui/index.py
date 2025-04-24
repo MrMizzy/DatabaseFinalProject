@@ -1,6 +1,58 @@
 import customtkinter as ctk
 from PIL import Image
+from models.hostel_model import get_hostel_details_by_name, get_room_types_by_hostel_name
 
+class GenericHostelWindow(ctk.CTk):
+    def __init__(self, title):
+        super().__init__()
+        self.title(title)
+        self.geometry("1400x700")
+
+        # Get data
+        self.hostel_info = get_hostel_details_by_name(title)
+        self.room_info = get_room_types_by_hostel_name(title)
+
+        self.create_content()
+
+    def create_content(self):
+        self.content_frame = ctk.CTkFrame(self, fg_color="#1d1065")
+        self.content_frame.pack(fill="both", expand=True)
+
+        self.content_frame.grid_columnconfigure(0, weight=1)
+        self.content_frame.grid_columnconfigure(1, weight=1)
+        self.content_frame.grid_columnconfigure(2, weight=1)
+        self.content_frame.grid_rowconfigure(0, weight=1)
+        self.content_frame.grid_rowconfigure(1, weight=1)
+
+        # Left Column: Hostel Info
+        about_frame = ctk.CTkFrame(self.content_frame, fg_color="#444444", border_color="white", border_width=1)
+        about_frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+
+        manager_frame = ctk.CTkFrame(self.content_frame, fg_color="#444444", border_color="white", border_width=1)
+        manager_frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
+
+        # Right Section: Room Info
+        result_frame = ctk.CTkFrame(self.content_frame, fg_color="#444444")
+        result_frame.grid(row=0, rowspan=2, column=1, columnspan=2, sticky="nsew", padx=20, pady=20)
+
+        # Fill in hostel info
+        if self.hostel_info:
+            ctk.CTkLabel(about_frame, text=self.hostel_info["Hostel_Name"], font=("Roboto", 20)).pack(pady=5)
+            ctk.CTkLabel(about_frame, text=f"Location: {self.hostel_info['Location']}", font=("Roboto", 14)).pack()
+            ctk.CTkLabel(manager_frame, text=f"Manager: {self.hostel_info['Manager_Name']}", font=("Roboto", 14)).pack()
+            ctk.CTkLabel(manager_frame, text=f"Phone: {self.hostel_info['PhoneNo.']}", font=("Roboto", 14)).pack()
+
+        # Fill in room info
+        for room in self.room_info:
+            info = f"{room['Room_Description']} - GHS {room['Price']} | Total: {room['Total_Rooms']} | Available: {room['Available_Rooms']}"
+            ctk.CTkLabel(result_frame, text=info, font=("Roboto", 12)).pack(anchor="w", pady=2)
+
+class HostelWindow(ctk.CTk):
+    def __init__(self, title):
+        super().__init__()
+        self.title(title)
+        self.geometry("1400x700")
+        ctk.CTkLabel(self, text=title, font=("Roboto", 24)).pack(pady=20)
 
 class MainWindow(ctk.CTk):
     def __init__(self):
@@ -84,7 +136,8 @@ class MainWindow(ctk.CTk):
         columbiana_button = ctk.CTkButton(hostel_section,
                                       image=columbiana,
                                       text="",
-                                      fg_color='transparent')
+                                      fg_color='transparent',
+                                      command=self.columbiana_page)
         columbiana_button.grid(row=0,column=2, padx= 10, pady= 5)
 
         duf_ann = ctk.CTkImage(light_image= Image.open("Images/Dufie_Annex.png"),
@@ -93,7 +146,8 @@ class MainWindow(ctk.CTk):
         duf_ann_button = ctk.CTkButton(hostel_section,
                                       image=duf_ann,
                                       text="",
-                                      fg_color='transparent')
+                                      fg_color='transparent',
+                                      command=self.duf_ann_page)
         duf_ann_button.grid(row=1,column=0, padx= 10, pady= 5)
 
         duf_gol = ctk.CTkImage(light_image= Image.open("Images/Dufie_Gold.png"),
@@ -102,7 +156,8 @@ class MainWindow(ctk.CTk):
         duf_gol_button = ctk.CTkButton(hostel_section,
                                       image=duf_gol,
                                       text="",
-                                      fg_color='transparent')
+                                      fg_color='transparent',
+                                      command=self.duf_gol_page)
         duf_gol_button.grid(row=1,column=1, padx= 10, pady= 5)
 
         duf_pla = ctk.CTkImage(light_image= Image.open("Images/Dufie_Platinum.png"),
@@ -111,7 +166,8 @@ class MainWindow(ctk.CTk):
         duf_pla_button = ctk.CTkButton(hostel_section,
                                       image=duf_pla,
                                       text="",
-                                      fg_color='transparent')
+                                      fg_color='transparent',
+                                      command=self.duf_pla_page)
         duf_pla_button.grid(row=1,column=2, padx= 10, pady= 5)
 
         duf_pre = ctk.CTkImage(light_image= Image.open("Images/Dufie_Prestige.png"),
@@ -120,7 +176,8 @@ class MainWindow(ctk.CTk):
         duf_pre_button = ctk.CTkButton(hostel_section,
                                       image=duf_pre,
                                       text="",
-                                      fg_color='transparent')
+                                      fg_color='transparent',
+                                      command=self.duf_pre_page)
         duf_pre_button.grid(row=3,column=0, padx= 10, pady= 5)
 
         new_hos = ctk.CTkImage(light_image= Image.open("Images/New_Hosanna.png"),
@@ -129,7 +186,8 @@ class MainWindow(ctk.CTk):
         new_hos_button = ctk.CTkButton(hostel_section,
                                       image=new_hos,
                                       text="",
-                                      fg_color='transparent')
+                                      fg_color='transparent',
+                                      command=self.new_hos_page)
         new_hos_button.grid(row=3,column=1, padx= 10, pady= 5)
 
         new_mas = ctk.CTkImage(light_image= Image.open("Images/New_Masere.png"),
@@ -138,7 +196,8 @@ class MainWindow(ctk.CTk):
         new_mas_button = ctk.CTkButton(hostel_section,
                                       image=new_mas,
                                       text="",
-                                      fg_color='transparent')
+                                      fg_color='transparent',
+                                      command=self.new_mas_page)
         new_mas_button.grid(row=3,column=2, padx= 10, pady= 5)
 
         old_hos = ctk.CTkImage(light_image= Image.open("Images/Old_Hosanna.png"),
@@ -147,7 +206,8 @@ class MainWindow(ctk.CTk):
         old_hos_button = ctk.CTkButton(hostel_section,
                                       image=old_hos,
                                       text="",
-                                      fg_color='transparent')
+                                      fg_color='transparent',
+                                      command=self.old_hos_page)
         old_hos_button.grid(row=4,column=0, padx= 10, pady= 5)
 
         old_mas = ctk.CTkImage(light_image= Image.open("Images/Old_Masere.png"),
@@ -156,7 +216,8 @@ class MainWindow(ctk.CTk):
         old_mas_button = ctk.CTkButton(hostel_section,
                                       image=old_mas,
                                       text="",
-                                      fg_color='transparent')
+                                      fg_color='transparent',
+                                      command=self.old_mas_page)
         old_mas_button.grid(row=4,column=1, padx= 10, pady= 5)
 
         queen = ctk.CTkImage(light_image= Image.open("Images/Queenstar.png"),
@@ -165,7 +226,8 @@ class MainWindow(ctk.CTk):
         queen_button = ctk.CTkButton(hostel_section,
                                       image=queen,
                                       text="",
-                                      fg_color='transparent')
+                                      fg_color='transparent',
+                                      command=self.queen_page)
         queen_button.grid(row=4,column=2, padx= 10, pady= 5)
 
         tanko = ctk.CTkImage(light_image= Image.open("Images/Tanko.png"),
@@ -174,14 +236,47 @@ class MainWindow(ctk.CTk):
         tanko_button = ctk.CTkButton(hostel_section,
                                       image=tanko,
                                       text="",
-                                      fg_color='transparent')
+                                      fg_color='transparent',
+                                      command=self.tanko_page)
         tanko_button.grid(row=5,column=1, padx= 10, pady= 5)
+        
+    def columbiana_page(self):
+        GenericHostelWindow("Columbiana Hostel").mainloop()
+
+    def duf_ann_page(self):
+        GenericHostelWindow("Dufie Annex").mainloop()
+
+    def duf_gol_page(self):
+        GenericHostelWindow("Dufie Gold").mainloop()
+
+    def duf_pla_page(self):
+        GenericHostelWindow("Dufie Platinum").mainloop()
+
+    def duf_pre_page(self):
+        GenericHostelWindow("Dufie Prestige").mainloop()
+
+    def new_hos_page(self):
+        GenericHostelWindow("New Hosanna").mainloop()
+
+    def new_mas_page(self):
+        GenericHostelWindow("New Masere").mainloop()
+
+    def old_hos_page(self):
+        GenericHostelWindow("Old Hosanna").mainloop()
+
+    def old_mas_page(self):
+        GenericHostelWindow("Old Masere").mainloop()
+
+    def queen_page(self):
+        GenericHostelWindow("Queenstar").mainloop()
+
+    def tanko_page(self):
+        GenericHostelWindow("Tanko").mainloop()
 
 
     def ceewus_page(self):
         CeewusWindow().mainloop()
         
-       
     def charlotte_page(self):
         CharlotteWindow().mainloop()
 
@@ -398,3 +493,4 @@ class CharlotteWindow(ctk.CTk):
 
 
 MainWindow().mainloop()
+
