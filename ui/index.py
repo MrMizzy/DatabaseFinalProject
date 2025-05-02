@@ -85,6 +85,9 @@ class MainWindow(ctk.CTk):
         self.title("Main page")
         self.geometry("1400x700")
 
+        # Debounce variable for search
+        self._search_after_id = None
+
         # Load the UI
         self.create_header()
 
@@ -298,14 +301,15 @@ class MainWindow(ctk.CTk):
 
 
     def ceewus_page(self):
-        CeewusWindow().mainloop()
+        GenericHostelWindow("Ceewus").mainloop()
         
     def charlotte_page(self):
-        CharlotteWindow().mainloop()
+        GenericHostelWindow("Charlotte").mainloop()
 
 
     def create_search_view(self):
         tab = self.tabs.add("Search")
+        self.search_tab = tab  # Store for callback access
         tab.grid_columnconfigure(0, weight=1)
         tab.grid_columnconfigure(1, weight=1)
         tab.grid_columnconfigure(2, weight=1)
@@ -316,13 +320,12 @@ class MainWindow(ctk.CTk):
         self.create_price_section(tab)
         self.create_bed_section(tab)
 
-        # Frame for results
-        result_section = ctk.CTkFrame(tab,
-                                      fg_color="#444444")
-        result_section.grid(row=0, column=1,
-                            columnspan=3, rowspan=2,
-                            sticky="nsew", padx= 20)
-        ctk.CTkLabel(result_section,text="Filter Results", font=("Roboto",32)).pack(pady=10)
+        # Frame for results (scrollable)
+        result_scroll_container = ctk.CTkScrollableFrame(tab, fg_color="#444444")
+        result_scroll_container.grid(row=0, column=1, columnspan=3, rowspan=2, sticky="nsew", padx=20)
+        self.result_section = result_scroll_container
+        ctk.CTkLabel(self.result_section, text="Filter Results", font=("Roboto", 32)).pack(pady=10)
+        self.refresh_search_results()
 
 
     def create_price_section(self, master: ctk.CTkFrame):
@@ -347,7 +350,8 @@ class MainWindow(ctk.CTk):
                                         variable=self.minprice)
         minprice_slider.pack(side="right", fill="x", expand=True, padx=5, pady=10)
         minprice_slider.set(2500)
-
+        minprice_slider.configure(command=self.refresh_search_results)
+        self.minprice_slider = minprice_slider
 
         maxprice_frame = ctk.CTkFrame(price_section)
         maxprice_frame.pack(fill="x", padx=5, pady=10)
@@ -361,7 +365,8 @@ class MainWindow(ctk.CTk):
                                         variable=self.maxprice)
         maxprice_slider.pack(side="right", fill="x", expand=True, padx=5, pady=10)
         maxprice_slider.set(10000)
-        
+        maxprice_slider.configure(command=self.refresh_search_results)
+        self.maxprice_slider = maxprice_slider
 
     def create_bed_section(self, master: ctk.CTkFrame):
         tab = master
@@ -372,22 +377,21 @@ class MainWindow(ctk.CTk):
         bed_section.grid(row=1, column= 0, sticky= "nsew")
         ctk.CTkLabel(bed_section, text="Beds", font=("Roboto", 32)).pack(pady=10)
 
-
-
         # Sliders for beds
         minbed_frame = ctk.CTkFrame(bed_section)
         minbed_frame.pack(fill="x", padx=5, pady=10)
         self.minbed = ctk.IntVar()
         ctk.CTkLabel(minbed_frame, text="Minimum Beds", font=("Roboto", 30)).pack(pady=10)
         ctk.CTkLabel(minbed_frame, textvariable= self.minbed).pack(side="left", padx=5)
-        minprice_slider = ctk.CTkSlider(minbed_frame,
+        minbed_slider = ctk.CTkSlider(minbed_frame,
                                         from_=1,
                                         to=4,
                                         number_of_steps=4,
                                         variable=self.minbed)
-        minprice_slider.pack(side="right", fill="x", expand=True, padx=5, pady=10)
-        minprice_slider.set(1)
-
+        minbed_slider.pack(side="right", fill="x", expand=True, padx=5, pady=10)
+        minbed_slider.set(1)
+        minbed_slider.configure(command=self.refresh_search_results)
+        self.minbed_slider = minbed_slider
 
         maxbed_frame = ctk.CTkFrame(bed_section)
         maxbed_frame.pack(fill="x", padx=5, pady=10)
@@ -401,118 +405,78 @@ class MainWindow(ctk.CTk):
                                         variable=self.maxbed)
         maxbed_slider.pack(side="right", fill="x", expand=True, padx=5, pady=10)
         maxbed_slider.set(4)
+        maxbed_slider.configure(command=self.refresh_search_results)
+        self.maxbed_slider = maxbed_slider
 
-        
-class CeewusWindow(ctk.CTk):
-    def __init__(self):
-        super().__init__()
-        
-        # Configure window
-        self.title("Ceewus Hostel")
-        self.geometry("1400x700")
 
-        # Load the UI
-        self.create_header()
-        self.create_content()
+    def refresh_search_results(self, *args):
+        # Debounce: cancel previous after, schedule new after 500ms
+        if self._search_after_id:
+            self.after_cancel(self._search_after_id)
+        self._search_after_id = self.after(1000, self._perform_search)
 
-    def create_header(self):
-        self.header_frame = ctk.CTkFrame(self,
-                                         height=250)
-        self.header_frame.pack(fill="x", pady=20, padx=10)
-        # self.header_frame.grid(row= 0, column= 0, sticky= "nsew")
-        ctk.CTkLabel(self.header_frame, text="Header", font=("Roboto", 14)).pack(fill="x")
+    def _perform_search(self):
+        from models.hostel_model import get_rooms_within_price_range, get_rooms_by_room_size
 
-    def create_content(self):
-        self.content_frame = ctk.CTkFrame(self,
-                                         fg_color="#1d1065")
-        self.content_frame.pack(fill= "both", expand=True)
+        # Clear previous results
+        for widget in self.result_section.winfo_children():
+            widget.destroy()
 
-         # configs for this view
-        self.content_frame.grid_columnconfigure(0, weight=1)
-        self.content_frame.grid_columnconfigure(1, weight=1)
-        self.content_frame.grid_columnconfigure(2, weight=1)
-        self.content_frame.grid_rowconfigure(0, weight=1)
-        self.content_frame.grid_rowconfigure(1, weight=1)
+        min_price = self.minprice.get()
+        max_price = self.maxprice.get()
+        min_beds = self.minbed.get()
+        max_beds = self.maxbed.get()
 
-        # About section
-        about_frame = ctk.CTkFrame(self.content_frame,
-                                   fg_color="#444444",
-                                   bg_color="#444444",
-                                   border_color="white",
-                                   border_width=1)
-        about_frame.grid(row=0, column=0, sticky= "nsew")
+        price_filtered_rooms = get_rooms_within_price_range(min_price, max_price)
+        bed_filtered_rooms = []
+        for i in range(min_beds, max_beds + 1):
+            bed_filtered_rooms.extend(get_rooms_by_room_size(i))
 
-        # Manager section
-        about_frame = ctk.CTkFrame(self.content_frame,
-                                   fg_color="#444444",
-                                   bg_color="#444444",
-                                   border_color="white",
-                                   border_width=1)
-        about_frame.grid(row=1, column=0, sticky= "nsew")
+        # Filter intersection of both criteria
+        matched_rooms = []
+        seen = set()
+        for room in price_filtered_rooms:
+            for b_room in bed_filtered_rooms:
+                if room["Room_ID"] == b_room["Room_ID"] and room["Room_ID"] not in seen:
+                    matched_rooms.append(room)
+                    seen.add(room["Room_ID"])
 
-        # result section
-        result_frame = ctk.CTkFrame(self.content_frame,
-                                   fg_color="#444444",
-                                   bg_color="#1d1065")
-        result_frame.grid(row=0, rowspan= 2,
-                          column=1, columnspan= 2, 
-                          sticky= "nsew", padx= 20, pady= 20)
-        
+        if not matched_rooms:
+            ctk.CTkLabel(self.result_section, text="No rooms match the selected criteria.", font=("Roboto", 16)).pack(pady=20)
+            return
+
+        # Avoid duplicate descriptions
+        seen_descriptions = set()
+        for room in matched_rooms:
+            desc = room['Room_Description']
+            if desc in seen_descriptions:
+                continue
+            seen_descriptions.add(desc)
+            label = f"{desc} | GHS {room['Price']}"
+            button = ctk.CTkButton(self.result_section, text=label, font=("Roboto", 12), fg_color="#666666",
+                                   command=lambda r=room: self.show_room_instances({'Room_Description': r['Room_Description']}))
+            button.pack(anchor="w", pady=4, fill="x", padx=10)
     
-class CharlotteWindow(ctk.CTk):
-    def __init__(self):
-        super().__init__()
-        
-        # Configure window
-        self.title("Charlotte's Court")
-        self.geometry("1400x700")
+    def show_room_instances(self, room_type):
+        import tkinter.messagebox
+        from models.hostel_model import get_room_instances_by_type
 
-        # Load the UI
-        self.create_header()
-        self.create_content()
+        rooms = get_room_instances_by_type(room_type['Room_Description'])
+        if not rooms:
+            tkinter.messagebox.showinfo("No Rooms", "No available room instances for this type.")
+            return
 
-    def create_header(self):
-        self.header_frame = ctk.CTkFrame(self,
-                                         height=250)
-        self.header_frame.pack(fill="x", pady=20, padx=10)
-        # self.header_frame.grid(row= 0, column= 0, sticky= "nsew")
-        ctk.CTkLabel(self.header_frame, text="Header", font=("Roboto", 14)).pack(fill="x")
+        popup = ctk.CTkToplevel(self)
+        popup.title(room_type["Room_Description"])
+        popup.geometry("500x400")
 
-    def create_content(self):
-        self.content_frame = ctk.CTkFrame(self,
-                                         fg_color="#1d1065")
-        self.content_frame.pack(fill= "both", expand=True)
+        # Scrollable frame for room list
+        scroll_frame = ctk.CTkScrollableFrame(popup, fg_color="#333333")
+        scroll_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
-         # configs for this view
-        self.content_frame.grid_columnconfigure(0, weight=1)
-        self.content_frame.grid_columnconfigure(1, weight=1)
-        self.content_frame.grid_columnconfigure(2, weight=1)
-        self.content_frame.grid_rowconfigure(0, weight=1)
-        self.content_frame.grid_rowconfigure(1, weight=1)
-
-        # About section
-        about_frame = ctk.CTkFrame(self.content_frame,
-                                   fg_color="#444444",
-                                   bg_color="#444444",
-                                   border_color="white",
-                                   border_width=1)
-        about_frame.grid(row=0, column=0, sticky= "nsew")
-
-        # Manager section
-        about_frame = ctk.CTkFrame(self.content_frame,
-                                   fg_color="#444444",
-                                   bg_color="#444444",
-                                   border_color="white",
-                                   border_width=1)
-        about_frame.grid(row=1, column=0, sticky= "nsew")
-
-        # result section
-        result_frame = ctk.CTkFrame(self.content_frame,
-                                   fg_color="#444444",
-                                   bg_color="#1d1065")
-        result_frame.grid(row=0, rowspan= 2,
-                          column=1, columnspan= 2, 
-                          sticky= "nsew", padx= 20, pady= 20)
+        for r in rooms:
+            label = ctk.CTkLabel(scroll_frame, text=f"Room: {r['Room_ID']} | Beds Available: {r['Available_Beds']}", font=("Roboto", 14))
+            label.pack(pady=5, anchor="w")
 
 
 MainWindow().mainloop()

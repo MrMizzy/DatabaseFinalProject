@@ -114,7 +114,7 @@ def get_rooms_within_price_range(min_price, max_price):
     if not connection:
         return []
     
-    cursor=connection.cursor()
+    cursor=connection.cursor(dictionary=True)
 
     try:
         cursor.execute(f"SELECT rm.Room_ID, rt.Room_Description, rt.Price, rm.Available_Beds FROM Rooms rm JOIN RoomTypes rt ON rm.Room_Type=rt.TypeID  WHERE Price BETWEEN {min_price} AND {max_price} ORDER BY rt.Hostel_ID, rt.Price;")
@@ -129,7 +129,7 @@ def get_rooms_by_room_size(room_size):
     if not connection:
         return []
     
-    cursor=connection.cursor()
+    cursor=connection.cursor(dictionary=True)
 
     try:
         cursor.execute(f"SELECT rm.Room_ID, rt.Room_Description, rt.Price, rm.Available_Beds FROM Rooms rm JOIN RoomTypes rt ON rm.Room_Type=rt.TypeID WHERE rt.Room_Description Like '%{room_size} in a Room%' ORDER BY rt.Price,rt.Hostel_ID;")
