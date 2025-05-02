@@ -26,26 +26,49 @@ class GenericHostelWindow(ctk.CTk):
 
         # Left Column: Hostel Info
         about_frame = ctk.CTkFrame(self.content_frame, fg_color="#444444", border_color="white", border_width=1)
-        about_frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+        about_frame.grid(row=0, column=0, sticky="nsew", padx=16, pady=(18, 8))
 
         manager_frame = ctk.CTkFrame(self.content_frame, fg_color="#444444", border_color="white", border_width=1)
-        manager_frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
+        manager_frame.grid(row=1, column=0, sticky="nsew", padx=16, pady=(8, 18))
 
         # Right Section: Room Info
         result_frame = ctk.CTkFrame(self.content_frame, fg_color="#444444")
-        result_frame.grid(row=0, rowspan=2, column=1, columnspan=2, sticky="nsew", padx=20, pady=20)
+        result_frame.grid(row=0, rowspan=2, column=1, columnspan=2, sticky="nsew", padx=24, pady=24)
 
         # Fill in hostel info
         if self.hostel_info:
-            ctk.CTkLabel(about_frame, text=self.hostel_info["Hostel_Name"], font=("Roboto", 20)).pack(pady=5)
-            ctk.CTkLabel(about_frame, text=f"Location: {self.hostel_info['Location']}", font=("Roboto", 14)).pack()
-            ctk.CTkLabel(manager_frame, text=f"Manager: {self.hostel_info['Manager_Name']}", font=("Roboto", 14)).pack()
-            ctk.CTkLabel(manager_frame, text=f"Phone: {self.hostel_info['PhoneNo.']}", font=("Roboto", 14)).pack()
+            ctk.CTkLabel(about_frame, text=self.hostel_info["Hostel_Name"], font=("Roboto", 24, "bold")).pack(pady=10)
+            ctk.CTkLabel(about_frame, text=f"Location: {self.hostel_info['Location']}", font=("Roboto", 16)).pack(pady=5)
+            ctk.CTkLabel(manager_frame, text=f"Manager: {self.hostel_info['Manager_Name']}", font=("Roboto", 16)).pack(pady=5)
+            ctk.CTkLabel(manager_frame, text=f"Phone: {self.hostel_info['PhoneNo.']}", font=("Roboto", 16)).pack(pady=5)
 
-        # Fill in room info
+        # Fill in room info as clickable buttons
         for room in self.room_info:
             info = f"{room['Room_Description']} - GHS {room['Price']} | Total: {room['Total_Rooms']} | Available: {room['Available_Rooms']}"
-            ctk.CTkLabel(result_frame, text=info, font=("Roboto", 12)).pack(anchor="w", pady=2)
+            button = ctk.CTkButton(result_frame, text=info, font=("Roboto", 12), fg_color="#666666",
+                                   command=lambda r=room: self.show_room_instances(r))
+            button.pack(anchor="w", pady=4, fill="x", padx=5)
+
+    def show_room_instances(self, room_type):
+        import tkinter.messagebox
+        from models.hostel_model import get_room_instances_by_type
+
+        rooms = get_room_instances_by_type(room_type['Room_Description'])
+        if not rooms:
+            tkinter.messagebox.showinfo("No Rooms", "No available room instances for this type.")
+            return
+
+        popup = ctk.CTkToplevel(self)
+        popup.title(room_type["Room_Description"])
+        popup.geometry("500x400")
+
+        # Add a scrollable frame to the popup
+        scroll_frame = ctk.CTkScrollableFrame(popup, fg_color="#333333")
+        scroll_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+        for r in rooms:
+            label = ctk.CTkLabel(scroll_frame, text=f"Room: {r['Room_ID']} | Beds Available: {r['Available_Beds']}", font=("Roboto", 14))
+            label.pack(pady=5, anchor="w")
 
 class HostelWindow(ctk.CTk):
     def __init__(self, title):

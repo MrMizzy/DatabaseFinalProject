@@ -1,5 +1,26 @@
 from db.connection import get_connection
 
+def get_room_instances_by_type(room_description):
+    connection = get_connection()
+    if not connection:
+        return []
+
+    cursor = connection.cursor(dictionary=True)
+    try:
+        cursor.execute("""
+            SELECT rm.Room_ID, rm.Available_Beds
+            FROM Rooms rm
+            JOIN RoomTypes rt ON rm.Room_Type = rt.TypeID
+            WHERE rt.Room_Description = %s
+        """, (room_description,))
+        return cursor.fetchall()
+    except Exception as e:
+        print(f"Error fetching room instances: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
+
 def get_hostel_details_by_name(hostel_name):
     conn = get_connection()
     if not conn:
