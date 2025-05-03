@@ -132,9 +132,48 @@ def get_rooms_by_room_size(room_size):
     cursor=connection.cursor(dictionary=True)
 
     try:
-        cursor.execute(f"SELECT rm.Room_ID, rt.Room_Description, rt.Price, rm.Available_Beds FROM Rooms rm JOIN RoomTypes rt ON rm.Room_Type=rt.TypeID WHERE rt.Room_Description Like '%{room_size} in a Room%' ORDER BY rt.Price,rt.Hostel_ID;")
-        results= cursor.fetchall()
+        pattern = f"%{room_size} in a room%"  # lowercase
+        cursor.execute(
+            """
+            SELECT rm.Room_ID, rt.Room_Description, rt.Price, rm.Available_Beds
+            FROM Rooms rm
+            JOIN RoomTypes rt ON rm.Room_Type=rt.TypeID
+            WHERE LOWER(rt.Room_Description) LIKE %s
+            ORDER BY rt.Price, rt.Hostel_ID;
+            """,
+            (pattern,)
+        )
+        results = cursor.fetchall()
         return results
     except Exception as e:
         print(f"Error fetching rooms: {e}")
         return []
+
+def get_rooms_by_price_and_beds(min_price, max_price, min_beds, max_beds):
+    connection = get_connection()
+    if not connection:
+        return []
+
+    cursor = connection.cursor(dictionary=True)
+    try:
+        # Create SQL conditions dynamically
+        bed_conditions = " OR ".join(["LOWER(rt.Room_Description) LIKE %s" for _ in range(min_beds, max_beds + 1)])
+        bed_patterns = [f"%{i} in a room%" for i in range(min_beds, max_beds + 1)]
+
+        query = f"""
+            SELECT rm.Room_ID, rt.Room_Description, rt.Price, rm.Available_Beds
+            FROM Rooms rm
+            JOIN RoomTypes rt ON rm.Room_Type = rt.TypeID
+            WHERE rt.Price BETWEEN %s AND %s AND ({bed_conditions})
+            ORDER BY rt.Price, rt.Hostel_ID;
+        """
+
+        cursor.execute(query, (min_price, max_price, *bed_patterns))
+        return cursor.fetchall()
+
+    except Exception as e:
+        print(f"Error fetching combined filtered rooms: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()

@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from PIL import Image
-from models.hostel_model import get_hostel_details_by_name, get_room_types_by_hostel_name
+from models.hostel_model import get_hostel_details_by_name, get_room_types_by_hostel_name, get_rooms_by_price_and_beds
 
 class GenericHostelWindow(ctk.CTk):
     def __init__(self, title):
@@ -427,19 +427,7 @@ class MainWindow(ctk.CTk):
         min_beds = self.minbed.get()
         max_beds = self.maxbed.get()
 
-        price_filtered_rooms = get_rooms_within_price_range(min_price, max_price)
-        bed_filtered_rooms = []
-        for i in range(min_beds, max_beds + 1):
-            bed_filtered_rooms.extend(get_rooms_by_room_size(i))
-
-        # Filter intersection of both criteria
-        matched_rooms = []
-        seen = set()
-        for room in price_filtered_rooms:
-            for b_room in bed_filtered_rooms:
-                if room["Room_ID"] == b_room["Room_ID"] and room["Room_ID"] not in seen:
-                    matched_rooms.append(room)
-                    seen.add(room["Room_ID"])
+        matched_rooms = get_rooms_by_price_and_beds(min_price, max_price, min_beds, max_beds)
 
         if not matched_rooms:
             ctk.CTkLabel(self.result_section, text="No rooms match the selected criteria.", font=("Roboto", 16)).pack(pady=20)
