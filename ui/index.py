@@ -267,7 +267,7 @@ class MainWindow(ctk.CTk):
         tanko_button.grid(row=5,column=1, padx= 10, pady= 5)
         
     def columbiana_page(self):
-        GenericHostelWindow("Columbiana Hostel").mainloop()
+        GenericHostelWindow("Columbiana").mainloop()
 
     def duf_ann_page(self):
         GenericHostelWindow("Dufie Annex").mainloop()
@@ -301,10 +301,10 @@ class MainWindow(ctk.CTk):
 
 
     def ceewus_page(self):
-        GenericHostelWindow("Ceewus").mainloop()
+        GenericHostelWindow("CEEWUS").mainloop()
         
     def charlotte_page(self):
-        GenericHostelWindow("Charlotte").mainloop()
+        GenericHostelWindow("Charlotte's Court").mainloop()
 
 
     def create_search_view(self):
