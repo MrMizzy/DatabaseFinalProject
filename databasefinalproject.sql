@@ -15,7 +15,7 @@ CREATE Table Hostels(
     FOREIGN KEY(Manager_ID) REFERENCES managers(manager_ID));
 
 CREATE Table RoomTypes(
-    TypeID VARCHAR(10) NOT NULL PRIMARY KEY,
+    Type_ID VARCHAR(10) NOT NULL PRIMARY KEY,
     Hostel_ID VARCHAR(6),
     FOREIGN KEY(Hostel_ID) REFERENCES Hostels(Hostel_ID),
     Room_Description VARCHAR(255),
@@ -25,15 +25,15 @@ CREATE Table RoomTypes(
 
 CREATE Table Rooms(
     Room_ID VARCHAR(10),
-    Room_Type VARCHAR(10),
-    Foreign Key (Room_Type) REFERENCES RoomTypes(TypeID),
+    Type_ID VARCHAR(10),
+    Foreign Key (Type_ID) REFERENCES RoomTypes(Type_ID),
     Available_Beds int,
-    Primary Key(Room_ID, Room_Type)
+    Primary Key(Room_ID, Type_ID)
 );
 
 CREATE VIEW RoomTypeStats AS
 SELECT 
-    RT.TypeID,
+    RT.Type_ID,
     RT.Hostel_ID,
     RT.Room_Description,
     RT.Price,
@@ -41,9 +41,9 @@ SELECT
     SUM(R.Available_Beds = 0) AS Booked_Rooms,
     RT.Total_Rooms - SUM(R.Available_Beds = 0) AS Available_Rooms
 FROM RoomTypes RT
-LEFT JOIN Rooms R ON RT.TypeID = R.Room_Type
+LEFT JOIN Rooms R ON RT.Type_ID = R.Type_ID
 GROUP BY 
-    RT.TypeID, 
+    RT.Type_ID, 
     RT.Hostel_ID, 
     RT.Room_Description, 
     RT.Price, 
@@ -76,7 +76,7 @@ INSERT into hostels(`Hostel_ID`,`Hostel_Name`,`Location`,`Manager_ID`) VALUES
 ("CEE_C","CEEWUS","1st Turn, University Avenue",9);
 
 
-INSERT INTO roomtypes(TypeID, Hostel_ID, Room_Description, Price, Total_Rooms) VALUES
+INSERT INTO roomtypes(Type_ID, Hostel_ID, Room_Description, Price, Total_Rooms) VALUES
 ("DUF_A2","DUF_A","Dufie Annex 2 in a Room",7100,50),
 ("DUF_G2","DUF_G","Dufie Gold 2 in a Room",6800,24),
 ("DUF_P2","DUF_P","Dufie Prestige 2 in a Room",6800,10),
@@ -101,7 +101,7 @@ INSERT INTO roomtypes(TypeID, Hostel_ID, Room_Description, Price, Total_Rooms) V
 ("CHA_C3","CHA_C","Charlotte 3 in a Room",4600,50),
 ("CHA_C4","CHA_C","Charlotte 4 in a Room",2500,50);
 
-INSERT into Rooms(`Room_ID`,`Room_Type`,`Available_Beds`) VALUES
+INSERT into Rooms(`Room_ID`,`Type_ID`,`Available_Beds`) VALUES
 ('A01', 'DUF_A2', 0),
 ('A02', 'DUF_A2', 0),
 ('A03', 'DUF_A2', 0),
@@ -153,7 +153,7 @@ INSERT into Rooms(`Room_ID`,`Room_Type`,`Available_Beds`) VALUES
 ('B21', 'DUF_A2', 0),
 ('B22', 'DUF_A2', 0);
 
-INSERT into Rooms(`Room_ID`,`Room_Type`,`Available_Beds`) VALUES
+INSERT into Rooms(`Room_ID`,`Type_ID`,`Available_Beds`) VALUES
 ('M1', 'DUF_PL32', 0),
 ('M2', 'DUF_PL32', 0),
 ('M3', 'DUF_PL31', 0),
@@ -185,7 +185,7 @@ INSERT into Rooms(`Room_ID`,`Room_Type`,`Available_Beds`) VALUES
 ('F14', 'DUF_PL31', 0),
 ('F15', 'DUF_PL32', 0);
 
-INSERT into Rooms(`Room_ID`,`Room_Type`,`Available_Beds`) VALUES
+INSERT into Rooms(`Room_ID`,`Type_ID`,`Available_Beds`) VALUES
 ('P1', 'DUF_P2', 0),
 ('P2', 'DUF_P2', 0),
 ('P3', 'DUF_P2', 0),
@@ -197,7 +197,7 @@ INSERT into Rooms(`Room_ID`,`Room_Type`,`Available_Beds`) VALUES
 ('P9', 'DUF_P2', 0),
 ('P10', 'DUF_P2', 0);
 
-INSERT into Rooms(`Room_ID`,`Room_Type`,`Available_Beds`) VALUES
+INSERT into Rooms(`Room_ID`,`Type_ID`,`Available_Beds`) VALUES
 ('G1', 'DUF_G2', 0),
 ('G2', 'DUF_G2', 0),
 ('G3', 'DUF_G2', 0),
@@ -223,7 +223,7 @@ INSERT into Rooms(`Room_ID`,`Room_Type`,`Available_Beds`) VALUES
 ('G23', 'DUF_G2', 0),
 ('G24', 'DUF_G2', 0);
 
-INSERT into Rooms(`Room_ID`,`Room_Type`,`Available_Beds`) VALUES
+INSERT into Rooms(`Room_ID`,`Type_ID`,`Available_Beds`) VALUES
 ('B1', 'OLD_M2', 0),
 ('B2', 'OLD_M2', 0),
 ('B3', 'OLD_M3', 1),
@@ -248,7 +248,7 @@ INSERT into Rooms(`Room_ID`,`Room_Type`,`Available_Beds`) VALUES
 ('G9', 'OLD_M2', 0),
 ('G10','OLD_M2' ,0);
 
-INSERT into Rooms(`Room_ID`,`Room_Type`,`Available_Beds`) VALUES
+INSERT into Rooms(`Room_ID`,`Type_ID`,`Available_Beds`) VALUES
 ('A1', 'NEW_H2', 0),
 ('A2', 'NEW_H2', 0),
 ('A3', 'NEW_H2', 0),
@@ -301,7 +301,7 @@ INSERT into Rooms(`Room_ID`,`Room_Type`,`Available_Beds`) VALUES
 ('C16', 'NEW_H2', 0),
 ('C17', 'NEW_H2', 0);
 
-INSERT into Rooms(`Room_ID`,`Room_Type`,`Available_Beds`) VALUES
+INSERT into Rooms(`Room_ID`,`Type_ID`,`Available_Beds`) VALUES
 ('G1', 'NEW_M2', 0),
 ('G2', 'NEW_M3', 0),
 ('G3', 'NEW_M2', 0),
