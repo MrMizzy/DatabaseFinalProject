@@ -42,9 +42,9 @@ class GenericHostelWindow(ctk.CTk):
             ctk.CTkLabel(manager_frame, text=f"Manager: {self.hostel_info['Manager_Name']}", font=("Roboto", 16)).pack(pady=5)
             ctk.CTkLabel(manager_frame, text=f"Phone: {self.hostel_info['PhoneNo.']}", font=("Roboto", 16)).pack(pady=5)
 
-        # Fill in room info as clickable buttons
+        # Fill in room info as clickable buttons (excluding Available_Rooms)
         for room in self.room_info:
-            info = f"{room['Room_Description']} - GHS {room['Price']} | Total: {room['Total_Rooms']} | Available: {room['Available_Rooms']}"
+            info = f"{room['Room_Description']} - GHS {room['Price']} | Total Rooms: {room['Total_Rooms']}"
             button = ctk.CTkButton(result_frame, text=info, font=("Roboto", 12), fg_color="#666666",
                                    command=lambda r=room: self.show_room_instances(r))
             button.pack(anchor="w", pady=4, fill="x", padx=5)
