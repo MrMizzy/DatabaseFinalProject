@@ -1,5 +1,0 @@
-customtkinter
-Pillow
-mysql-connector
-mysql-connector-python
-python-dotenv  # optional, if you want to store DB credentials in a .env file
