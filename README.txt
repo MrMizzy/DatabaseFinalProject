@@ -10,3 +10,4 @@ You can install these libraries using pip: pip install customtkinter Pillow mysq
 To run the project, run the main.py file in the project directory.
 The project is currently set to run using a database hosted on Google Cloud Platform.
 To run the database locally, run the databasefinalproject.sql file, and chnage the  login details in the connect.py file, in the db folder.
+Link to the project presentation: https://youtu.be/adLzTtcOs9M
