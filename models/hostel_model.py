@@ -50,10 +50,9 @@ def get_room_types_by_hostel_name(hostel_name):
     cursor = conn.cursor(dictionary=True)
     try:
         cursor.execute("""
-            SELECT rt.Room_Description, rt.Price, rt.Total_Rooms, rt.Booked_Rooms,
-                   (rt.Total_Rooms - rt.Booked_Rooms) AS Available_Rooms
-            FROM RoomTypes rt
-            JOIN Hostels h ON rt.Hostel_ID = h.Hostel_ID
+            SELECT rts.Room_Description, rts.Price, rts.Total_Rooms, rts.Booked_Rooms, rts.Available_Rooms
+            FROM RoomTypeStats rts
+            JOIN Hostels h ON rts.Hostel_ID = h.Hostel_ID
             WHERE h.Hostel_Name = %s
         """, (hostel_name,))
         return cursor.fetchall()
