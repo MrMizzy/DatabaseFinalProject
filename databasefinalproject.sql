@@ -21,8 +21,6 @@ CREATE Table RoomTypes(
     Room_Description VARCHAR(255),
     Price int,
     Total_Rooms int,
-    Booked_Rooms int,
-    Available_Rooms int as (`Total_Rooms`-`Booked_Rooms`)
 );
 
 CREATE Table Rooms(
