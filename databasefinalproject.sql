@@ -35,7 +35,7 @@ CREATE Table Rooms(
 
 CREATE VIEW RoomTypeStats AS
 SELECT 
-    RT.TypeID,
+    RT.Type_ID,
     RT.Hostel_ID,
     RT.Room_Description,
     RT.Price,
@@ -43,9 +43,9 @@ SELECT
     SUM(R.Available_Beds = 0) AS Booked_Rooms,
     RT.Total_Rooms - SUM(R.Available_Beds = 0) AS Available_Rooms
 FROM RoomTypes RT
-LEFT JOIN Rooms R ON RT.TypeID = R.Room_Type
+LEFT JOIN Rooms R ON RT.Type_ID = R.Type_ID
 GROUP BY 
-    RT.TypeID, 
+    RT.Type_ID, 
     RT.Hostel_ID, 
     RT.Room_Description, 
     RT.Price, 
@@ -78,7 +78,7 @@ INSERT into hostels(`Hostel_ID`,`Hostel_Name`,`Location`,`Manager_ID`) VALUES
 ("CEE_C","CEEWUS","1st Turn, University Avenue",9);
 
 
-INSERT INTO roomtypes(TypeID, Hostel_ID, Room_Description, Price, Total_Rooms) VALUES
+INSERT INTO roomtypes(Type_ID, Hostel_ID, Room_Description, Price, Total_Rooms) VALUES
 ("DUF_A2","DUF_A","Dufie Annex 2 in a Room",7100,50),
 ("DUF_G2","DUF_G","Dufie Gold 2 in a Room",6800,24),
 ("DUF_P2","DUF_P","Dufie Prestige 2 in a Room",6800,10),
