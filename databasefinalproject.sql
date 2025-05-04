@@ -20,9 +20,7 @@ CREATE Table RoomTypes(
     FOREIGN KEY(Hostel_ID) REFERENCES Hostels(Hostel_ID),
     Room_Description VARCHAR(255),
     Price int,
-    Total_Rooms int,
-    Booked_Rooms int,
-    Available_Rooms int as (`Total_Rooms`-`Booked_Rooms`)
+    Total_Rooms int
 );
 
 CREATE Table Rooms(
@@ -32,6 +30,24 @@ CREATE Table Rooms(
     Available_Beds int,
     Primary Key(Room_ID, Room_Type)
 );
+
+CREATE VIEW RoomTypeStats AS
+SELECT 
+    RT.TypeID,
+    RT.Hostel_ID,
+    RT.Room_Description,
+    RT.Price,
+    RT.Total_Rooms,
+    SUM(R.Available_Beds = 0) AS Booked_Rooms,
+    RT.Total_Rooms - SUM(R.Available_Beds = 0) AS Available_Rooms
+FROM RoomTypes RT
+LEFT JOIN Rooms R ON RT.TypeID = R.Room_Type
+GROUP BY 
+    RT.TypeID, 
+    RT.Hostel_ID, 
+    RT.Room_Description, 
+    RT.Price, 
+    RT.Total_Rooms;
 
 INSERT into Managers(`Manager_ID`,`Manager_Name`,`PhoneNo.`) VALUES
 (1,"Victoria Kudjoe", "+233543958700"),
@@ -60,30 +76,30 @@ INSERT into hostels(`Hostel_ID`,`Hostel_Name`,`Location`,`Manager_ID`) VALUES
 ("CEE_C","CEEWUS","1st Turn, University Avenue",9);
 
 
-INSERT INTO roomtypes(TypeID, Hostel_ID, Room_Description, Price, Total_Rooms, Booked_Rooms) VALUES
-("DUF_A2","DUF_A","Dufie Annex 2 in a Room",7100,50,50),
-("DUF_G2","DUF_G","Dufie Gold 2 in a Room",6800,24,24),
-("DUF_P2","DUF_P","Dufie Prestige 2 in a Room",6800,10,10),
-("DUF_PL31","DUF_PL","Dufie 3 in a Room w 1 bathroom",5700,12,12),
-("DUF_PL32","DUF_PL","Dufie 3 in a Room w 2 bathroom",5900,18,18),
-("OLD_H2","OLD_H","Old Hosanna 2 in a Room",6400,0,0),
-("OLD_H3","OLD_H","Old Hosanna 3 in a Room",5600,0,0),
-("NEW_H2","NEW_H","New Hosanna 2 in a Room",6900,0,0),
-("NEW_H3","NEW_H","New Hosanna 3 in a Room",5000,0,0),
-("OLD_M2","OLD_M","Old Masere 2 in a Room",6800,18,10),
-("OLD_M3","OLD_M","Old Masere 3 in a Room",5800,5,3),
-("NEW_M2","NEW_M","New Masere 2 in a Room",7000,30,28),
-("NEW_M3","NEW_M","New Masere 3 in a Room",6000,9,8),
-("CEE_C1","CEE_C","Ceewus 1 in a Room",9000,0,0),
-("CEE_C2A","CEE_C","Ceewus 2 in a Room w AC",7000,0,0),
-("CEE_C2","CEE_C","Ceewus 2 in a Room w/out AC",6000,0,0),
-("CEE_C3","CEE_C","Ceewus 3 in a Room",9000,0,0),
-("TAN_T2","TAN_T","Tanko 2 in a Room",8000,16,15),
-("CHA_C1","CHA_C","Charlotte 1 in a Room",8000,50,10),
-("CHA_C2B","CHA_C","Charlotte 2 in a Room Big",6800,50,10),
-("CHA_C2S","CHA_C","Charlotte 2 in a Room Small",5200,50,10),
-("CHA_C3","CHA_C","Charlotte 3 in a Room",4600,50,10),
-("CHA_C4","CHA_C","Charlotte 4 in a Room",2500,50,10);
+INSERT INTO roomtypes(TypeID, Hostel_ID, Room_Description, Price, Total_Rooms) VALUES
+("DUF_A2","DUF_A","Dufie Annex 2 in a Room",7100,50),
+("DUF_G2","DUF_G","Dufie Gold 2 in a Room",6800,24),
+("DUF_P2","DUF_P","Dufie Prestige 2 in a Room",6800,10),
+("DUF_PL31","DUF_PL","Dufie 3 in a Room w 1 bathroom",5700,12),
+("DUF_PL32","DUF_PL","Dufie 3 in a Room w 2 bathroom",5900,18),
+("OLD_H2","OLD_H","Old Hosanna 2 in a Room",6400,0),
+("OLD_H3","OLD_H","Old Hosanna 3 in a Room",5600,0),
+("NEW_H2","NEW_H","New Hosanna 2 in a Room",6900,0),
+("NEW_H3","NEW_H","New Hosanna 3 in a Room",5000,0),
+("OLD_M2","OLD_M","Old Masere 2 in a Room",6800,18),
+("OLD_M3","OLD_M","Old Masere 3 in a Room",5800,5),
+("NEW_M2","NEW_M","New Masere 2 in a Room",7000,30),
+("NEW_M3","NEW_M","New Masere 3 in a Room",6000,9),
+("CEE_C1","CEE_C","Ceewus 1 in a Room",9000,0),
+("CEE_C2A","CEE_C","Ceewus 2 in a Room w AC",7000,0),
+("CEE_C2","CEE_C","Ceewus 2 in a Room w/out AC",6000,0),
+("CEE_C3","CEE_C","Ceewus 3 in a Room",9000,0),
+("TAN_T2","TAN_T","Tanko 2 in a Room",8000,16),
+("CHA_C1","CHA_C","Charlotte 1 in a Room",8000,50),
+("CHA_C2B","CHA_C","Charlotte 2 in a Room Big",6800,50),
+("CHA_C2S","CHA_C","Charlotte 2 in a Room Small",5200,50),
+("CHA_C3","CHA_C","Charlotte 3 in a Room",4600,50),
+("CHA_C4","CHA_C","Charlotte 4 in a Room",2500,50);
 
 INSERT into Rooms(`Room_ID`,`Room_Type`,`Available_Beds`) VALUES
 ('A01', 'DUF_A2', 0),
