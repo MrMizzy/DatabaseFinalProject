@@ -10,7 +10,7 @@ def get_room_instances_by_type(room_description):
         cursor.execute("""
             SELECT rm.Room_ID, rm.Available_Beds
             FROM Rooms rm
-            JOIN RoomTypes rt ON rm.Room_Type = rt.TypeID
+            JOIN RoomTypes rt ON rm.Type_ID = rt.Type_ID
             WHERE rt.Room_Description = %s
         """, (room_description,))
         return cursor.fetchall()
@@ -42,7 +42,7 @@ def get_hostel_details_by_name(hostel_name):
         cursor.close()
         conn.close()
 
-def get_room_types_by_hostel_name(hostel_name):
+def get_Type_IDs_by_hostel_name(hostel_name):
     conn = get_connection()
     if not conn:
         return []
@@ -101,7 +101,7 @@ def get_hostel_rooms(hostel_id):
     cursor=connection.cursor()
 
     try:
-        cursor.execute(f"SELECT rm.Room_ID, rt.Room_Description, rt.Price, rm.Available_Beds FROM Rooms rm JOIN RoomTypes rt ON rm.Room_Type=rt.TypeID WHERE rt.Hostel_ID = '{hostel_id}';")
+        cursor.execute(f"SELECT rm.Room_ID, rt.Room_Description, rt.Price, rm.Available_Beds FROM Rooms rm JOIN RoomTypes rt ON rm.Type_ID=rt.Type_ID WHERE rt.Hostel_ID = '{hostel_id}';")
         results= cursor.fetchall()
         return results
     except Exception as e:
@@ -116,7 +116,7 @@ def get_rooms_within_price_range(min_price, max_price):
     cursor=connection.cursor(dictionary=True)
 
     try:
-        cursor.execute(f"SELECT rm.Room_ID, rt.Room_Description, rt.Price, rm.Available_Beds FROM Rooms rm JOIN RoomTypes rt ON rm.Room_Type=rt.TypeID  WHERE Price BETWEEN {min_price} AND {max_price} ORDER BY rt.Hostel_ID, rt.Price;")
+        cursor.execute(f"SELECT rm.Room_ID, rt.Room_Description, rt.Price, rm.Available_Beds FROM Rooms rm JOIN RoomTypes rt ON rm.Type_ID=rt.Type_ID  WHERE Price BETWEEN {min_price} AND {max_price} ORDER BY rt.Hostel_ID, rt.Price;")
         results= cursor.fetchall()
         return results
     except Exception as e:
@@ -136,7 +136,7 @@ def get_rooms_by_room_size(room_size):
             """
             SELECT rm.Room_ID, rt.Room_Description, rt.Price, rm.Available_Beds
             FROM Rooms rm
-            JOIN RoomTypes rt ON rm.Room_Type=rt.TypeID
+            JOIN RoomTypes rt ON rm.Type_ID=rt.Type_ID
             WHERE LOWER(rt.Room_Description) LIKE %s
             ORDER BY rt.Price, rt.Hostel_ID;
             """,
@@ -162,7 +162,7 @@ def get_rooms_by_price_and_beds(min_price, max_price, min_beds, max_beds):
         query = f"""
             SELECT rm.Room_ID, rt.Room_Description, rt.Price, rm.Available_Beds
             FROM Rooms rm
-            JOIN RoomTypes rt ON rm.Room_Type = rt.TypeID
+            JOIN RoomTypes rt ON rm.Type_ID = rt.Type_ID
             WHERE rt.Price BETWEEN %s AND %s AND ({bed_conditions})
             ORDER BY rt.Price, rt.Hostel_ID;
         """
